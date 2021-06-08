@@ -34,7 +34,7 @@ func (g *GpuMat) Upload(data gocv.Mat) {
 //
 // For further details, please see:
 // https://docs.opencv.org/master/d0/d60/classcv_1_1cuda_1_1GpuMat.html#a027e74e4364ddfd9687b58aa5db8d4e8
-func (g *GpuMat) Download(dst *gocv.Mat) {
+func (g *GpuMat) Download(dst gocv.Mat) {
 	C.GpuMat_Download(g.p, C.Mat(dst.Ptr()))
 }
 
@@ -56,8 +56,8 @@ func NewGpuMat() GpuMat {
 }
 
 // NewGpuMatFromMat returns a new GpuMat based on a Mat
-func NewGpuMatFromMat(mat gocv.Mat) GpuMat {
-	return newGpuMat(C.GpuMat_NewFromMat(C.Mat(mat.Ptr())))
+func NewGpuMatFromMat(m gocv.Mat) GpuMat {
+	return newGpuMat(C.GpuMat_NewFromMat(C.Mat(m.Ptr())))
 }
 
 func newGpuMat(p C.GpuMat) GpuMat {

@@ -31,7 +31,7 @@ func TestCanny_Detect(t *testing.T) {
 	dest := gocv.NewMat()
 	defer dest.Close()
 
-	dimg.Download(&dest)
+	dimg.Download(dest)
 
 	if dest.Empty() {
 		t.Error("Empty Canny test")
@@ -71,7 +71,7 @@ func TestHoughLines_Calc(t *testing.T) {
 	dest := gocv.NewMat()
 	defer dest.Close()
 
-	dimg.Download(&dest)
+	dimg.Download(dest)
 
 	if dest.Empty() {
 		t.Error("Empty HoughLines test")
@@ -130,7 +130,7 @@ func TestHoughSegment_Calc(t *testing.T) {
 	dest := gocv.NewMat()
 	defer dest.Close()
 
-	dimg.Download(&dest)
+	dimg.Download(dest)
 
 	if dest.Empty() {
 		t.Error("Empty HoughSegment test")

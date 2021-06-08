@@ -11,7 +11,7 @@ import (
 // ImgHashBase defines the interface used for all of the img_hash algorithms.
 type ImgHashBase interface {
 	Compare(a, b gocv.Mat) float64
-	Compute(inputArr gocv.Mat, outputArr *gocv.Mat)
+	Compute(inputArr gocv.Mat, outputArr gocv.Mat)
 }
 
 // PHash is implementation of the PHash algorithm.
@@ -23,7 +23,7 @@ type PHash struct{}
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash PHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash PHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.pHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()))
 }
 
@@ -45,7 +45,7 @@ type AverageHash struct{}
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash AverageHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash AverageHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.averageHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()))
 }
 
@@ -77,7 +77,7 @@ const (
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash BlockMeanHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash BlockMeanHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.blockMeanHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()), C.int(hash.Mode))
 }
 
@@ -102,7 +102,7 @@ type ColorMomentHash struct{}
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash ColorMomentHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash ColorMomentHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.colorMomentHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()))
 }
 
@@ -131,7 +131,7 @@ func NewMarrHildrethHash() MarrHildrethHash {
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash MarrHildrethHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash MarrHildrethHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.marrHildrethHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()),
 		C.float(hash.Alpha), C.float(hash.Scale))
 }
@@ -162,7 +162,7 @@ func NewRadialVarianceHash() RadialVarianceHash {
 // For further information, see:
 // https://docs.opencv.org/master/de/d29/classcv_1_1img__hash_1_1ImgHashBase.html#ae2d9288db370089dfd8aab85d5e0b0f3
 //
-func (hash RadialVarianceHash) Compute(input gocv.Mat, output *gocv.Mat) {
+func (hash RadialVarianceHash) Compute(input gocv.Mat, output gocv.Mat) {
 	C.radialVarianceHashCompute(C.Mat(input.Ptr()), C.Mat(output.Ptr()),
 		C.double(hash.Sigma), C.int(hash.NumOfAngleLine))
 }

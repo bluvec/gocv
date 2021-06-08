@@ -398,7 +398,7 @@ func TestBlobFromImages(t *testing.T) {
 	imgs = append(imgs, img)
 
 	blob := NewMat()
-	BlobFromImages(imgs, &blob, 1.0, image.Pt(25, 25), NewScalar(0, 0, 0, 0), false, false, MatTypeCV32F)
+	BlobFromImages(imgs, blob, 1.0, image.Pt(25, 25), NewScalar(0, 0, 0, 0), false, false, MatTypeCV32F)
 	defer blob.Close()
 
 	sz := GetBlobSize(blob)
@@ -436,7 +436,7 @@ func TestImagesFromBlob(t *testing.T) {
 
 	blob := NewMat()
 	defer blob.Close()
-	BlobFromImages(imgs, &blob, 1.0, image.Pt(img.Size()[0], img.Size()[1]), NewScalar(0, 0, 0, 0), false, false, MatTypeCV32F)
+	BlobFromImages(imgs, blob, 1.0, image.Pt(img.Size()[0], img.Size()[1]), NewScalar(0, 0, 0, 0), false, false, MatTypeCV32F)
 
 	imgsFromBlob := make([]Mat, len(imgs))
 	ImagesFromBlob(blob, imgsFromBlob)
@@ -445,10 +445,10 @@ func TestImagesFromBlob(t *testing.T) {
 		func() {
 			imgFromBlob := NewMat()
 			defer imgFromBlob.Close()
-			imgsFromBlob[i].ConvertTo(&imgFromBlob, imgs[i].Type())
+			imgsFromBlob[i].ConvertTo(imgFromBlob, imgs[i].Type())
 			diff := NewMat()
 			defer diff.Close()
-			Compare(imgs[i], imgFromBlob, &diff, CompareNE)
+			Compare(imgs[i], imgFromBlob, diff, CompareNE)
 			nz := CountNonZero(diff)
 			if nz != 0 {
 				t.Error("imgFromBlob is different from img!")
@@ -581,7 +581,7 @@ func TestNMSBoxes(t *testing.T) {
 	}
 	defer img.Close()
 
-	img.ConvertTo(&img, MatTypeCV32F)
+	img.ConvertTo(img, MatTypeCV32F)
 
 	bboxes := []image.Rectangle{
 		image.Rect(53, 47, 589, 451),
@@ -609,7 +609,7 @@ func TestNMSBoxesWithParams(t *testing.T) {
 	}
 	defer img.Close()
 
-	img.ConvertTo(&img, MatTypeCV32F)
+	img.ConvertTo(img, MatTypeCV32F)
 
 	bboxes := []image.Rectangle{
 		image.Rect(53, 47, 589, 451),

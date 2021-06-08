@@ -28,7 +28,7 @@ func TestGaussianFilter_Apply(t *testing.T) {
 	dest := gocv.NewMat()
 	defer dest.Close()
 
-	dimg.Download(&dest)
+	dimg.Download(dest)
 
 	if dest.Empty() {
 		t.Error("Empty GaussianFilter test")
@@ -62,7 +62,7 @@ func TestSobelFilter_Apply(t *testing.T) {
 	dest := gocv.NewMat()
 	defer dest.Close()
 
-	dimg.Download(&dest)
+	dimg.Download(dest)
 
 	if dest.Empty() {
 		t.Error("Empty SobelFilter test")

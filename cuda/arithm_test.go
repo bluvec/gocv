@@ -23,7 +23,7 @@ func TestAbs(t *testing.T) {
 	defer dest.Close()
 
 	Abs(cimg, &dimg)
-	dimg.Download(&dest)
+	dimg.Download(dest)
 	if dest.Empty() || src.Rows() != dest.Rows() || src.Cols() != dest.Cols() {
 		t.Error("Invalid Abs test")
 	}
@@ -46,7 +46,7 @@ func TestThreshold(t *testing.T) {
 	defer dest.Close()
 
 	Threshold(cimg, &dimg, 25, 255, gocv.ThresholdBinary)
-	dimg.Download(&dest)
+	dimg.Download(dest)
 	if dest.Empty() || src.Rows() != dest.Rows() || src.Cols() != dest.Cols() {
 		t.Error("Invalid Threshold test")
 	}

@@ -12,7 +12,7 @@ const (
 	testImage2 = "../images/toy.jpg"
 )
 
-func compute(path string, hash ImgHashBase) (*gocv.Mat, error) {
+func compute(path string, hash ImgHashBase) (gocv.Mat, error) {
 	img := gocv.IMRead(path, gocv.IMReadColor)
 	if img.Empty() {
 		return nil, errors.New("Invalid input")
@@ -20,13 +20,13 @@ func compute(path string, hash ImgHashBase) (*gocv.Mat, error) {
 	defer img.Close()
 
 	dst := gocv.NewMat()
-	hash.Compute(img, &dst)
+	hash.Compute(img, dst)
 	if dst.Empty() {
 		dst.Close()
 		return nil, errors.New("Empty output")
 	}
 
-	return &dst, nil
+	return dst, nil
 }
 
 func testHash(t *testing.T, hash ImgHashBase) {
@@ -45,7 +45,7 @@ func testHash(t *testing.T, hash ImgHashBase) {
 	}
 	defer result2.Close()
 
-	similar := hash.Compare(*result, *result2)
+	similar := hash.Compare(result, result2)
 	t.Logf("%T: similarity %g", hash, similar)
 	// The range and meaning of this value varies between algorithms, and
 	// there doesn't seem to be a well defined set of default thresholds, so
@@ -75,7 +75,7 @@ func BenchmarkCompute(b *testing.B) {
 	compute := func(b *testing.B, hash ImgHashBase) {
 		for i := 0; i < b.N; i++ {
 			dst := gocv.NewMat()
-			hash.Compute(img, &dst)
+			hash.Compute(img, dst)
 			if dst.Empty() {
 				b.Error("Empty output")
 				dst.Close()
@@ -109,7 +109,7 @@ func BenchmarkCompare(b *testing.B) {
 
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			hash.Compare(*result1, *result2)
+			hash.Compare(result1, result2)
 		}
 	}
 

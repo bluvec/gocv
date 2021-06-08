@@ -1,8 +1,9 @@
 package cuda
 
 import (
-	"gocv.io/x/gocv"
 	"testing"
+
+	"gocv.io/x/gocv"
 )
 
 func TestCudaMOG2(t *testing.T) {
@@ -26,7 +27,7 @@ func TestCudaMOG2(t *testing.T) {
 
 	mog2.Apply(cimg, &dimg)
 
-	dimg.Download(&dst)
+	dimg.Download(dst)
 
 	if dst.Empty() {
 		t.Error("Error in TestCudaMOG2 test")
@@ -54,7 +55,7 @@ func TestCudaMOG(t *testing.T) {
 
 	mog2.Apply(cimg, &dimg)
 
-	dimg.Download(&dst)
+	dimg.Download(dst)
 
 	if dst.Empty() {
 		t.Error("Error in TestCudaMOG test")

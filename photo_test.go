@@ -13,7 +13,7 @@ func TestColorChange(t *testing.T) {
 	mask := src.Clone()
 	defer mask.Close()
 
-	ColorChange(src, mask, &dst, 1.5, .5, .5)
+	ColorChange(src, mask, dst, 1.5, .5, .5)
 	if dst.Empty() || dst.Rows() != src.Rows() || dst.Cols() != src.Cols() {
 		t.Error("Invlalid ColorChange test")
 	}
@@ -30,7 +30,7 @@ func TestSeamlessClone(t *testing.T) {
 	defer mask.Close()
 
 	center := image.Point{dst.Cols() / 2, dst.Rows() / 2}
-	SeamlessClone(src, dst, mask, center, &blend, NormalClone)
+	SeamlessClone(src, dst, mask, center, blend, NormalClone)
 	if blend.Empty() || dst.Rows() != blend.Rows() || dst.Cols() != blend.Cols() {
 		t.Error("Invlalid SeamlessClone test")
 	}
@@ -44,7 +44,7 @@ func TestIlluminationChange(t *testing.T) {
 	mask := src.Clone()
 	defer mask.Close()
 
-	IlluminationChange(src, mask, &dst, 0.2, 0.4)
+	IlluminationChange(src, mask, dst, 0.2, 0.4)
 	if dst.Empty() || dst.Rows() != src.Rows() || dst.Cols() != src.Cols() {
 		t.Error("Invlalid IlluminationChange test")
 	}
@@ -58,7 +58,7 @@ func TestTextureFlattening(t *testing.T) {
 	mask := src.Clone()
 	defer mask.Close()
 
-	TextureFlattening(src, mask, &dst, 30, 45, 3)
+	TextureFlattening(src, mask, dst, 30, 45, 3)
 	if dst.Empty() || dst.Rows() != src.Rows() || dst.Cols() != src.Cols() {
 		t.Error("Invlalid TextureFlattening test")
 	}
