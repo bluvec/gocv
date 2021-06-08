@@ -133,7 +133,7 @@ func main() {
 // where N is the number of detections, and each detection
 // is a vector of float values
 // [batchId, classId, confidence, left, top, right, bottom]
-func performDetection(frame *gocv.Mat, results gocv.Mat) {
+func performDetection(frame gocv.Mat, results gocv.Mat) {
 	for i := 0; i < results.Total(); i += 7 {
 		confidence := results.GetFloatAt(0, i+2)
 		if confidence > 0.5 {

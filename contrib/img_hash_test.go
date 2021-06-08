@@ -12,7 +12,7 @@ const (
 	testImage2 = "../images/toy.jpg"
 )
 
-func compute(path string, hash ImgHashBase) (*gocv.Mat, error) {
+func compute(path string, hash ImgHashBase) (gocv.Mat, error) {
 	img := gocv.IMRead(path, gocv.IMReadColor)
 	if img.Empty() {
 		return nil, errors.New("Invalid input")

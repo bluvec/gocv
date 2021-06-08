@@ -35,7 +35,7 @@ import (
 )
 
 var net *gocv.Net
-var images chan *gocv.Mat
+var images chan gocv.Mat
 var poses chan [][]image.Point
 var pose [][]image.Point
 
@@ -86,7 +86,7 @@ func main() {
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 
-	images = make(chan *gocv.Mat, 1)
+	images = make(chan gocv.Mat, 1)
 	poses = make(chan [][]image.Point)
 
 	if ok := webcam.Read(&img); !ok {
@@ -125,7 +125,7 @@ func main() {
 	}
 }
 
-func processFrame(i *gocv.Mat) {
+func processFrame(i gocv.Mat) {
 	frame := gocv.NewMat()
 	i.CopyTo(&frame)
 	images <- &frame
@@ -218,7 +218,7 @@ func performDetection() {
 	}
 }
 
-func drawPose(frame *gocv.Mat) {
+func drawPose(frame gocv.Mat) {
 	for _, pts := range pose {
 		gocv.Line(frame, pts[0], pts[1], color.RGBA{0, 255, 0, 0}, 2)
 		gocv.Circle(frame, pts[0], 3, color.RGBA{0, 0, 200, 0}, -1)
