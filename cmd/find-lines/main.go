@@ -30,15 +30,15 @@ func main() {
 
 	window := gocv.NewWindow("detected lines")
 
-	gocv.Canny(m, &matCanny, 50, 200)
-	gocv.HoughLinesP(matCanny, &matLines, 1, math.Pi/180, 80)
+	gocv.Canny(m, matCanny, 50, 200)
+	gocv.HoughLinesP(matCanny, matLines, 1, math.Pi/180, 80)
 
 	fmt.Println(matLines.Cols())
 	fmt.Println(matLines.Rows())
 	for i := 0; i < matLines.Rows(); i++ {
 		pt1 := image.Pt(int(matLines.GetVeciAt(i, 0)[0]), int(matLines.GetVeciAt(i, 0)[1]))
 		pt2 := image.Pt(int(matLines.GetVeciAt(i, 0)[2]), int(matLines.GetVeciAt(i, 0)[3]))
-		gocv.Line(&m, pt1, pt2, color.RGBA{0, 255, 0, 50}, 10)
+		gocv.Line(m, pt1, pt2, color.RGBA{0, 255, 0, 50}, 10)
 	}
 
 	for {

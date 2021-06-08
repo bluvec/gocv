@@ -38,7 +38,7 @@ func TestSVDCompute(t *testing.T) {
 	vt := NewMat()
 	defer vt.Close()
 
-	SVDCompute(src, &w, &u, &vt)
+	SVDCompute(src, w, u, vt)
 
 	dataW, err := w.DataPtrFloat32()
 	if err != nil {

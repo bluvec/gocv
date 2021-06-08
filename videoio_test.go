@@ -123,7 +123,7 @@ func TestVideoCaptureFile(t *testing.T) {
 	img := NewMat()
 	defer img.Close()
 
-	vc.Read(&img)
+	vc.Read(img)
 	if img.Empty() {
 		t.Error("Unable to read VideoCaptureFile")
 	}

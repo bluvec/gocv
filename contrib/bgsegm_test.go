@@ -19,7 +19,7 @@ func TestCNT(t *testing.T) {
 	cnt := NewBackgroundSubtractorCNT()
 	defer cnt.Close()
 
-	cnt.Apply(img, &dst)
+	cnt.Apply(img, dst)
 
 	if dst.Empty() {
 		t.Error("Error in TestCNT test")

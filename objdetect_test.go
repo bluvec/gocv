@@ -134,13 +134,13 @@ func TestQRCodeDetector(t *testing.T) {
 	defer bbox.Close()
 	defer qr.Close()
 
-	res := detector.Detect(img, &bbox)
+	res := detector.Detect(img, bbox)
 	if !res {
 		t.Errorf("Error in TestQRCodeDetector test: res == false")
 	}
-	res2 := detector.Decode(img, bbox, &qr)
+	res2 := detector.Decode(img, bbox, qr)
 
-	res3 := detector.DetectAndDecode(img, &bbox, &qr)
+	res3 := detector.DetectAndDecode(img, bbox, qr)
 
 	if res2 != res3 {
 		t.Errorf("Error in TestQRCodeDetector res2: %s != res3: %s", res2, res3)
@@ -155,7 +155,7 @@ func TestQRCodeDetector(t *testing.T) {
 
 	multiBox := NewMat()
 	defer multiBox.Close()
-	res4 := detector.DetectMulti(img2, &multiBox)
+	res4 := detector.DetectMulti(img2, multiBox)
 	if !res4 {
 		t.Errorf("Error in TestQRCodeDetector Multi test: res == false")
 	}
@@ -173,7 +173,7 @@ func TestQRCodeDetector(t *testing.T) {
 			q.Close()
 		}
 	}()
-	success := detector.DetectAndDecodeMulti(img2, &decoded, &multiBox2, &qrCodes)
+	success := detector.DetectAndDecodeMulti(img2, &decoded, multiBox2, &qrCodes)
 	if !success {
 		t.Errorf("Error in TestQRCodeDetector Multi test: returned false")
 	}
@@ -184,16 +184,16 @@ func TestQRCodeDetector(t *testing.T) {
 	defer tmpQr.Close()
 	var tmpDecoded string
 	for i, s := range decoded {
-		tmpInput := padQr(&(qrCodes[i]))
+		tmpInput := padQr(qrCodes[i])
 		defer tmpInput.Close()
-		tmpDecoded = detector.Decode(tmpInput, tmpPoints, &tmpQr)
+		tmpDecoded = detector.Decode(tmpInput, tmpPoints, tmpQr)
 		if tmpDecoded != s {
 			t.Errorf("Error in TestQRCodeDetector Multi test: decoded straight QR code=%s, decoded[%d] =%s", tmpDecoded, i, s)
 		}
 	}
 
 	emptyMat := NewMatWithSize(100, 200, MatTypeCV8UC3)
-	success = detector.DetectAndDecodeMulti(emptyMat, &decoded, &multiBox2, &qrCodes)
+	success = detector.DetectAndDecodeMulti(emptyMat, &decoded, multiBox2, &qrCodes)
 	if success {
 		t.Errorf("Error in TestQRCodeDetector Multi test: empty Mat returned sucess=true")
 	}
@@ -208,9 +208,9 @@ func padQr(qr Mat) Mat {
 	out := NewMatWithSizeFromScalar(NewScalar(255, 255, 255, 255), L, L, MatTypeCV8UC3)
 	qrCodes0 := NewMat()
 	defer qrCodes0.Close()
-	qr.ConvertTo(&qrCodes0, MatTypeCV8UC3)
+	qr.ConvertTo(qrCodes0, MatTypeCV8UC3)
 
-	Resize(qrCodes0, &qrCodes0, image.Point{L, L}, 0, 0, InterpolationArea)
-	CopyMakeBorder(qrCodes0, &out, d, d, d, d, BorderConstant, color.RGBA{255, 255, 255, 255})
+	Resize(qrCodes0, qrCodes0, image.Point{L, L}, 0, 0, InterpolationArea)
+	CopyMakeBorder(qrCodes0, out, d, d, d, d, BorderConstant, color.RGBA{255, 255, 255, 255})
 	return out
 }

@@ -26,13 +26,13 @@ func TestResize(t *testing.T) {
 	defer dst.Close()
 
 	Resize(cimg, &dimg, image.Point{}, 0.5, 0.5, InterpolationDefault)
-	dimg.Download(&dst)
+	dimg.Download(dst)
 	if dst.Cols() != 200 || dst.Rows() != 172 {
 		t.Errorf("Expected dst size of 200x172 got %dx%d", dst.Cols(), dst.Rows())
 	}
 
 	Resize(cimg, &dimg, image.Pt(440, 377), 0, 0, InterpolationCubic)
-	dimg.Download(&dst)
+	dimg.Download(dst)
 	if dst.Cols() != 440 || dst.Rows() != 377 {
 		t.Errorf("Expected dst size of 440x377 got %dx%d", dst.Cols(), dst.Rows())
 	}
@@ -55,7 +55,7 @@ func TestPyrDown(t *testing.T) {
 	defer dst.Close()
 
 	PyrDown(gsrc, &gdst)
-	gdst.Download(&dst)
+	gdst.Download(dst)
 	if dst.Empty() && math.Abs(float64(src.Cols()-2*dst.Cols())) < 2.0 && math.Abs(float64(src.Rows()-2*dst.Rows())) < 2.0 {
 		t.Error("Invalid PyrDown test")
 	}
@@ -101,7 +101,7 @@ func TestRemap(t *testing.T) {
 	gmap1.Upload(map1)
 	gmap2.Upload(map2)
 	Remap(gsrc, &gdst, &gmap1, &gmap2, InterpolationDefault, BorderConstant, color.RGBA{0, 0, 0, 0})
-	gdst.Download(&dst)
+	gdst.Download(dst)
 	if ok := dst.Empty(); ok {
 		t.Errorf("Remap(): dst is empty")
 	}

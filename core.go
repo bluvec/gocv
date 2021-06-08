@@ -504,6 +504,31 @@ type Mat interface {
 
 	// Close the Mat object.
 	Close() error
+
+	// GetVecbAt returns a vector of bytes. Its size corresponds to the number
+	// of channels of the Mat.
+	GetVecbAt(row int, col int) Vecb
+
+	// GetVecfAt returns a vector of floats. Its size corresponds to the number of
+	// channels of the Mat.
+	GetVecfAt(row int, col int) Vecf
+
+	// GetVecdAt returns a vector of float64s. Its size corresponds to the number
+	// of channels of the Mat.
+	GetVecdAt(row int, col int) Vecd
+
+	// GetVeciAt returns a vector of integers. Its size corresponds to the number
+	// of channels of the Mat.
+	GetVeciAt(row int, col int) Veci
+
+	// ToImage converts a Mat to a image.Image.
+	ToImage() (image.Image, error)
+
+	// ToImageYUV converts a Mat to a image.YCbCr using image.YCbCrSubsampleRatio420 as default subsampling param.
+	ToImageYUV() (*image.YCbCr, error)
+
+	// ToImageYUV converts a Mat to a image.YCbCr using provided YUV subsample ratio param.
+	ToImageYUVWithParams(ratio image.YCbCrSubsampleRatio) (*image.YCbCr, error)
 }
 
 type mat struct {

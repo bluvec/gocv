@@ -441,14 +441,14 @@ func TestFlannBasedMatcher(t *testing.T) {
 		t.Error("descriptor one is empty in FlannBasedMatcher test")
 	}
 	defer desc1.Close()
-	desc1.ConvertTo(&desc1, MatTypeCV32F)
+	desc1.ConvertTo(desc1, MatTypeCV32F)
 
 	desc2 := IMRead(descriptorFile, IMReadGrayScale)
 	if desc2.Empty() {
 		t.Error("descriptor two is empty in FlannBasedMatcher test")
 	}
 	defer desc2.Close()
-	desc2.ConvertTo(&desc2, MatTypeCV32F)
+	desc2.ConvertTo(desc2, MatTypeCV32F)
 
 	f := NewFlannBasedMatcher()
 	defer f.Close()
@@ -478,7 +478,7 @@ func TestDrawKeyPoints(t *testing.T) {
 
 	simpleKP := NewMat()
 	defer simpleKP.Close()
-	DrawKeyPoints(img, kp, &simpleKP, color.RGBA{255, 0, 0, 0}, DrawDefault)
+	DrawKeyPoints(img, kp, simpleKP, color.RGBA{255, 0, 0, 0}, DrawDefault)
 
 	if simpleKP.Rows() != img.Rows() || simpleKP.Cols() != img.Cols() {
 		t.Error("Invalid DrawKeyPoints test")
@@ -541,7 +541,7 @@ func TestDrawMatches(t *testing.T) {
 	out := NewMat()
 	defer out.Close()
 
-	DrawMatches(query, kp1, train, kp2, good, &out, c, c, mask, DrawDefault)
+	DrawMatches(query, kp1, train, kp2, good, out, c, c, mask, DrawDefault)
 
 	if out.Cols() != (query.Cols()+train.Cols()) || out.Rows() < train.Rows() || out.Rows() < query.Rows() {
 		t.Error("Invalid DrawMatches test")
@@ -552,7 +552,7 @@ func TestDrawMatches(t *testing.T) {
 	smoke := NewMat()
 	defer smoke.Close()
 
-	DrawMatches(query, kp1, train, kp2, good, &smoke, c, c, mask, DrawDefault)
+	DrawMatches(query, kp1, train, kp2, good, smoke, c, c, mask, DrawDefault)
 }
 
 func TestSIFT(t *testing.T) {
