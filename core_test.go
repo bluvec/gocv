@@ -117,18 +117,18 @@ func TestMatWithSizes(t *testing.T) {
 		defer mat1.Close()
 		b := mat1.ToBytes()
 
-		mat, err := NewMatWithSizesFromBytes(sizes, MatTypeCV32FC2, b)
-		defer mat.Close()
-		if err != nil {
-			t.Errorf("NewMatWithSizesFromBytes %v\n", err)
+		mat := NewMatWithSizesFromBytes(sizes, MatTypeCV32FC2, b)
+		if mat == nil {
+			t.Error("NewMatWithSizesFromBytes")
+			return
 		}
+		defer mat.Close()
 		if mat.Empty() {
 			t.Error("NewMatWithSizesFromBytes should not be empty")
 		}
 
-		mat2, err := NewMatWithSizesFromBytes(sizes, MatTypeCV32FC2, nil)
-		defer mat2.Close()
-		if err == nil {
+		mat2 := NewMatWithSizesFromBytes(sizes, MatTypeCV32FC2, nil)
+		if mat2 != nil {
 			t.Error("NewMatWithSizesFromBytes should return error with empty bytes")
 		}
 

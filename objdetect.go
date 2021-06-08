@@ -271,15 +271,12 @@ func (a *QRCodeDetector) DetectAndDecodeMulti(input Mat, decoded *[]string, poin
 
 	tmpCodes := make([]Mat, cQrCodes.length)
 	for i := C.int(0); i < cQrCodes.length; i++ {
-		tmpCodes[i].SetPtr(C.Mats_get(cQrCodes, i))
+		tmpCodes[i] = NewMatByAcquirePtr(C.Mats_get(cQrCodes, i))
 	}
 
-	for _, qr := range tmpCodes {
-		*qrCodes = append(*qrCodes, qr)
-	}
+	*qrCodes = append(*qrCodes, tmpCodes...)
 
-	for _, s := range toGoStrings(cDecoded) {
-		*decoded = append(*decoded, s)
-	}
+	*decoded = append(*decoded, toGoStrings(cDecoded)...)
+
 	return bool(success)
 }

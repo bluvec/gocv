@@ -8,11 +8,15 @@ package gocv
 #include "core.h"
 */
 import "C"
-import "runtime"
+import (
+	"runtime"
+)
 
 type SafeMat interface {
 	// SetPtr sets the Mat's underlying object pointer.
-	SetPtr(p C.Mat)
+	// Be careful to use this function. Use it unless you known what you are doing.
+	// If you need to acquire a pointer, use `AcquirePtr`.
+	SetPtr(p C.Mat) C.Mat
 
 	// Release the ownership of the pointer p
 	ReleasePtr() C.Mat
@@ -29,9 +33,7 @@ func addMatToProfile(p C.Mat) {
 func newMat(p C.Mat) Mat {
 	m := mat{p: p}
 	runtime.SetFinalizer(&m, func(m *mat) {
-		if m.p != nil {
-			C.Mat_Close(m.p)
-		}
+		m.Close()
 	})
 	return &m
 }
@@ -48,8 +50,11 @@ func (m *mat) Close() error {
 }
 
 // SetPtr sets the Mat's underlying object pointer.
-func (m *mat) SetPtr(p C.Mat) {
-	m.AcquirePtr(p)
+// Be careful to use this function. Use it unless you known what you are doing.
+// If you need to acquire a pointer, use `AcquirePtr`.
+func (m *mat) SetPtr(p C.Mat) C.Mat {
+	p, m.p = m.p, p
+	return p
 }
 
 // Release the ownership of the pointer p

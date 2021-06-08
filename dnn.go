@@ -179,7 +179,7 @@ func (net *Net) ForwardLayers(outBlobNames []string) (blobs []Mat) {
 	C.Net_ForwardLayers((C.Net)(net.p), &(cMats), toCStrings(outBlobNames))
 	blobs = make([]Mat, cMats.length)
 	for i := C.int(0); i < cMats.length; i++ {
-		blobs[i].SetPtr(C.Mats_get(cMats, i))
+		blobs[i] = NewMatByAcquirePtr(C.Mats_get(cMats, i))
 		addMatToProfile(blobs[i].Ptr())
 	}
 	return
@@ -401,7 +401,7 @@ func ImagesFromBlob(blob Mat, imgs []Mat) {
 	C.Net_ImagesFromBlob(blob.Ptr(), &(cMats))
 	// mv = make([]Mat, cMats.length)
 	for i := C.int(0); i < cMats.length; i++ {
-		imgs[i].SetPtr(C.Mats_get(cMats, i))
+		imgs[i] = NewMatByAcquirePtr(C.Mats_get(cMats, i))
 	}
 }
 

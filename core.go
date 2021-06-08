@@ -543,6 +543,11 @@ func NewMat() Mat {
 	return newMat(C.Mat_New())
 }
 
+// NewMatByAcquirePtr returns a new Mat by acquiring raw C.Mat pointer.
+func NewMatByAcquirePtr(p C.Mat) Mat {
+	return newMat(p)
+}
+
 // NewMatWithSize returns a new Mat with a specific size and type.
 func NewMatWithSize(rows int, cols int, mt MatType) Mat {
 	return newMat(C.Mat_NewWithSize(C.int(rows), C.int(cols), C.int(mt)))
@@ -583,10 +588,10 @@ func NewMatWithSizesWithScalar(sizes []int, mt MatType, s Scalar) Mat {
 }
 
 // NewMatWithSizesWithScalar returns a new multidimensional Mat with a specific size, type and preexisting data.
-func NewMatWithSizesFromBytes(sizes []int, mt MatType, data []byte) (Mat, error) {
+func NewMatWithSizesFromBytes(sizes []int, mt MatType, data []byte) Mat {
 	cBytes, err := toByteArray(data)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
 	csizes := []C.int{}
@@ -597,7 +602,7 @@ func NewMatWithSizesFromBytes(sizes []int, mt MatType, data []byte) (Mat, error)
 	sizesVector.val = (*C.int)(&csizes[0])
 	sizesVector.length = (C.int)(len(csizes))
 
-	return newMat(C.Mat_NewWithSizesFromBytes(sizesVector, C.int(mt), *cBytes)), nil
+	return newMat(C.Mat_NewWithSizesFromBytes(sizesVector, C.int(mt), *cBytes))
 }
 
 // NewMatFromScalar returns a new Mat for a specific Scalar value
@@ -2186,7 +2191,7 @@ func Split(src Mat) (mv []Mat) {
 	defer C.Mats_Close(cMats)
 	mv = make([]Mat, cMats.length)
 	for i := C.int(0); i < cMats.length; i++ {
-		mv[i].SetPtr(C.Mats_get(cMats, i))
+		mv[i] = NewMatByAcquirePtr(C.Mats_get(cMats, i))
 		addMatToProfile(mv[i].Ptr())
 	}
 	return
