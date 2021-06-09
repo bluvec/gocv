@@ -8,7 +8,7 @@ import "C"
 import (
 	"unsafe"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 // PredictResponse represents a predicted label and associated confidence.

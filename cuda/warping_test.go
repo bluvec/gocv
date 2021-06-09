@@ -6,7 +6,7 @@ import (
 	"math"
 	"testing"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func TestResize(t *testing.T) {

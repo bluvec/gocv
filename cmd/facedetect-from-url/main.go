@@ -22,7 +22,7 @@ import (
 	"net/http"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func main() {

@@ -4,7 +4,7 @@ import (
 	"image"
 	"testing"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func BaseTestTracker(t *testing.T, tracker gocv.Tracker, name string) {
