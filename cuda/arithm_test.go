@@ -3,7 +3,7 @@ package cuda
 import (
 	"testing"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func TestAbs(t *testing.T) {

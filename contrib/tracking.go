@@ -7,7 +7,7 @@ import "C"
 import (
 	"image"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 // TrackerKCF is a Tracker based on KCF, which is a novel tracking framework that

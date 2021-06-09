@@ -10,6 +10,12 @@ OPENCV_VERSION?=4.5.2
 # Go version to use when building Docker image
 GOVERSION?=1.16.2
 
+# Python version
+PYTHON_VERSION?=$(shell python --version | grep -Po "(?<=Python )3.[0-9]+")
+
+# Install prefix
+INSTALL_PREFIX?=${CONDA_PREFIX}
+
 # Temporary directory to put files into.
 TMP_DIR?=/tmp/
 
@@ -17,8 +23,8 @@ TMP_DIR?=/tmp/
 BUILD_SHARED_LIBS?=ON
 
 # Package list for each well-known Linux distribution
-RPMS=cmake curl wget git gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip gcc-c++
-DEBS=unzip wget build-essential cmake curl git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev
+RPMS=curl wget git gtk2-devel libpng-devel libjpeg-devel libtiff-devel tbb tbb-devel libdc1394-devel unzip gcc-c++
+DEBS=unzip wget build-essential curl git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev
 
 explain:
 	@echo "For quick install with typical defaults of both OpenCV and GoCV, run 'make install'"
@@ -93,6 +99,16 @@ build:
 	cd build
 	rm -rf *
 	cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} -D OPENCV_EXTRA_MODULES_PATH=$(TMP_DIR)opencv/opencv_contrib-$(OPENCV_VERSION)/modules -D BUILD_DOCS=OFF -D BUILD_EXAMPLES=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_opencv_java=NO -D BUILD_opencv_python=NO -D BUILD_opencv_python2=NO -D BUILD_opencv_python3=NO -D WITH_JASPER=OFF -DOPENCV_GENERATE_PKGCONFIG=ON ..
+	$(MAKE) -j $(shell nproc --all)
+	$(MAKE) preinstall
+	cd -
+
+build_python:
+	cd $(TMP_DIR)opencv/opencv-$(OPENCV_VERSION)
+	mkdir build
+	cd build
+	rm -rf *
+	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} -DOPENCV_EXTRA_MODULES_PATH=$(TMP_DIR)opencv/opencv_contrib-$(OPENCV_VERSION)/modules -DWITH_TIFF=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DPYTHON3_LIBRARY=${CONDA_PREFIX}/lib/libpython${PYTHON_VERSION}.so -DPYTHON3_INCLUDE_DIR=${CONDA_PREFIX}/include/python${PYTHON_VERSION} -DWITH_JASPER=OFF -DOPENCV_GENERATE_PKGCONFIG=ON ..
 	$(MAKE) -j $(shell nproc --all)
 	$(MAKE) preinstall
 	cd -
@@ -177,6 +193,9 @@ sudo_pre_install_clean:
 
 # Do everything.
 install: deps download sudo_pre_install_clean build sudo_install clean verify
+
+# Do everything with Python.
+install_python: deps download sudo_pre_install_clean build_python sudo_install clean verify
 
 # Do everything on Raspbian.
 install_raspi: deps download build_raspi sudo_install clean verify

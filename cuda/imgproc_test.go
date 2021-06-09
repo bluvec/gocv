@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/bluvec/gocv"
 	"github.com/pascaldekloe/goe/verify"
-	"gocv.io/x/gocv"
 )
 
 func TestCanny_Detect(t *testing.T) {

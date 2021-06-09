@@ -16,7 +16,7 @@ import (
 	"image/color"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func main() {
@@ -33,19 +33,19 @@ func main() {
 	img := gocv.IMRead(filename, gocv.IMReadGrayScale)
 	defer img.Close()
 
-	gocv.MedianBlur(img, &img, 5)
+	gocv.MedianBlur(img, img, 5)
 
 	cimg := gocv.NewMat()
 	defer cimg.Close()
 
-	gocv.CvtColor(img, &cimg, gocv.ColorGrayToBGR)
+	gocv.CvtColor(img, cimg, gocv.ColorGrayToBGR)
 
 	circles := gocv.NewMat()
 	defer circles.Close()
 
 	gocv.HoughCirclesWithParams(
 		img,
-		&circles,
+		circles,
 		gocv.HoughGradient,
 		1,                     // dp
 		float64(img.Rows()/8), // minDist
@@ -66,8 +66,8 @@ func main() {
 			y := int(v[1])
 			r := int(v[2])
 
-			gocv.Circle(&cimg, image.Pt(x, y), r, blue, 2)
-			gocv.Circle(&cimg, image.Pt(x, y), 2, red, 3)
+			gocv.Circle(cimg, image.Pt(x, y), r, blue, 2)
+			gocv.Circle(cimg, image.Pt(x, y), 2, red, 3)
 		}
 	}
 

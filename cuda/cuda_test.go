@@ -1,8 +1,9 @@
 package cuda
 
 import (
-	"gocv.io/x/gocv"
 	"testing"
+
+	"github.com/bluvec/gocv"
 )
 
 func TestNewGpuMat(t *testing.T) {

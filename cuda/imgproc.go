@@ -10,7 +10,7 @@ import "C"
 import (
 	"unsafe"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 // CannyEdgeDetector

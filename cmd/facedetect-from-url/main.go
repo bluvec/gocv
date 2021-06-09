@@ -22,7 +22,7 @@ import (
 	"net/http"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func main() {
@@ -68,11 +68,11 @@ func main() {
 	// draw a rectangle around each face on the original image,
 	// along with text identifing as "Human"
 	for _, r := range rects {
-		gocv.Rectangle(&img, r, blue, 3)
+		gocv.Rectangle(img, r, blue, 3)
 
 		size := gocv.GetTextSize("Human", gocv.FontHersheyPlain, 1.2, 2)
 		pt := image.Pt(r.Min.X+(r.Min.X/2)-(size.X/2), r.Min.Y-2)
-		gocv.PutText(&img, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
+		gocv.PutText(img, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
 	}
 	gocv.IMWrite(saveFile, img)
 	fmt.Printf("saved to %s\n", saveFile)

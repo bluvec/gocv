@@ -5,7 +5,7 @@ package contrib
 import "C"
 
 import (
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 // ImgHashBase defines the interface used for all of the img_hash algorithms.

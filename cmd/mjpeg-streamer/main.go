@@ -24,8 +24,8 @@ import (
 
 	_ "net/http/pprof"
 
+	"github.com/bluvec/gocv"
 	"github.com/hybridgroup/mjpeg"
-	"gocv.io/x/gocv"
 )
 
 var (
@@ -71,7 +71,7 @@ func mjpegCapture() {
 	defer img.Close()
 
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}

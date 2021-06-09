@@ -1,9 +1,10 @@
 package contrib
 
 import (
-	"gocv.io/x/gocv"
 	"math"
 	"testing"
+
+	"github.com/bluvec/gocv"
 )
 
 func TestLBPHFaceRecognizer_Methods(t *testing.T) {

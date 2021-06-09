@@ -23,7 +23,7 @@ import (
 	"image/color"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func min(a, b float32) float32 {
@@ -77,7 +77,7 @@ func main() {
 	fmt.Printf("Start reading device: %v\n", deviceID)
 
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}
@@ -128,7 +128,7 @@ func main() {
 
 			// draw it
 			rect := image.Rect(int(left), int(top), int(right), int(bottom))
-			gocv.Rectangle(&img, rect, green, 3)
+			gocv.Rectangle(img, rect, green, 3)
 		}
 
 		window.IMShow(img)

@@ -70,7 +70,7 @@ func TestIMEncode(t *testing.T) {
 }
 
 func ExampleIMEncodeWithParams() {
-	img := IMRead(path.Join(os.Getenv("GOPATH"), "src/gocv.io/x/gocv/images/face-detect.jpg"), IMReadColor)
+	img := IMRead(path.Join(os.Getenv("GOPATH"), "src/github.com/bluvec/gocv/images/face-detect.jpg"), IMReadColor)
 	if img.Empty() {
 		log.Fatal("Invalid Mat")
 	}

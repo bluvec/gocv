@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}

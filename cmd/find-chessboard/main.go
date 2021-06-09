@@ -15,7 +15,7 @@ import (
 	"image"
 	"os"
 
-	"gocv.io/x/gocv"
+	"github.com/bluvec/gocv"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	corners := gocv.NewMat()
 	defer corners.Close()
 	sz := image.Point{X: 4, Y: 6}
-	found := gocv.FindChessboardCorners(img, sz, &corners, 0)
+	found := gocv.FindChessboardCorners(img, sz, corners, 0)
 	if found == false {
 		fmt.Printf("chessboard pattern not found")
 		return
@@ -49,7 +49,7 @@ func main() {
 	fmt.Printf("Corners Found. Size: %+v Rows: %+v Cols: %+v\n", corners.Size(), corners.Rows(), corners.Cols())
 	clone := img.Clone()
 	defer clone.Close()
-	gocv.DrawChessboardCorners(&clone, sz, corners, found)
+	gocv.DrawChessboardCorners(clone, sz, corners, found)
 	if clone.Empty() {
 		fmt.Printf("Error writing to chessboard image")
 		return
