@@ -39,11 +39,11 @@ func main() {
 	yellow := color.RGBA{255, 255, 0, 0}
 
 	// draw the atom
-	gocv.Ellipse(&atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 90., 0, 360, blue, 2)
-	gocv.Ellipse(&atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 0., 0, 360, blue, 2)
-	gocv.Ellipse(&atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 45., 0, 360, blue, 2)
-	gocv.Ellipse(&atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), -45., 0, 360, blue, 2)
-	gocv.Circle(&atom, image.Pt(w/2., w/2.), w/32., red, -1)
+	gocv.Ellipse(atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 90., 0, 360, blue, 2)
+	gocv.Ellipse(atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 0., 0, 360, blue, 2)
+	gocv.Ellipse(atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), 45., 0, 360, blue, 2)
+	gocv.Ellipse(atom, image.Pt(w/2., w/2.), image.Pt(w/4.0, w/16.0), -45., 0, 360, blue, 2)
+	gocv.Circle(atom, image.Pt(w/2., w/2.), w/32., red, -1)
 
 	// draw the rook
 	points := [][]image.Point{
@@ -74,12 +74,12 @@ func main() {
 	pv := gocv.NewPointsVectorFromPoints(points)
 	defer pv.Close()
 
-	gocv.FillPoly(&rook, pv, white)
-	gocv.Rectangle(&rook, image.Rect(0, 7*w/8.0, w, w), yellow, -1)
-	gocv.Line(&rook, image.Pt(0, 15*w/16), image.Pt(w, 15*w/16), black, 2)
-	gocv.Line(&rook, image.Pt(w/4, 7*w/8), image.Pt(w/4, w), black, 2)
-	gocv.Line(&rook, image.Pt(w/2, 7*w/8), image.Pt(w/2, w), black, 2)
-	gocv.Line(&rook, image.Pt(3*w/4, 7*w/8), image.Pt(3*w/4, w), black, 2)
+	gocv.FillPoly(rook, pv, white)
+	gocv.Rectangle(rook, image.Rect(0, 7*w/8.0, w, w), yellow, -1)
+	gocv.Line(rook, image.Pt(0, 15*w/16), image.Pt(w, 15*w/16), black, 2)
+	gocv.Line(rook, image.Pt(w/4, 7*w/8), image.Pt(w/4, w), black, 2)
+	gocv.Line(rook, image.Pt(w/2, 7*w/8), image.Pt(w/2, w), black, 2)
+	gocv.Line(rook, image.Pt(3*w/4, 7*w/8), image.Pt(3*w/4, w), black, 2)
 
 	for {
 		windowA.IMShow(atom)

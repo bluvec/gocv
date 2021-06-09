@@ -71,7 +71,7 @@ func mjpegCapture() {
 	defer img.Close()
 
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}

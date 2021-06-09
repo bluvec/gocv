@@ -62,7 +62,7 @@ func main() {
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}
@@ -77,11 +77,11 @@ func main() {
 		// draw a rectangle around each face on the original image,
 		// along with text identifing as "Human"
 		for _, r := range rects {
-			gocv.Rectangle(&img, r, blue, 3)
+			gocv.Rectangle(img, r, blue, 3)
 
 			size := gocv.GetTextSize("Human", gocv.FontHersheyPlain, 1.2, 2)
 			pt := image.Pt(r.Min.X+(r.Min.X/2)-(size.X/2), r.Min.Y-2)
-			gocv.PutText(&img, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
+			gocv.PutText(img, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
 		}
 
 		// show the image in the window, and wait 1 millisecond

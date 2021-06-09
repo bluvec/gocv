@@ -89,17 +89,17 @@ func main() {
 	images = make(chan gocv.Mat, 1)
 	poses = make(chan [][]image.Point)
 
-	if ok := webcam.Read(&img); !ok {
+	if ok := webcam.Read(img); !ok {
 		fmt.Printf("Error cannot read device %v\n", deviceID)
 		return
 	}
 
-	processFrame(&img)
+	processFrame(img)
 
 	go performDetection()
 
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}
@@ -110,13 +110,13 @@ func main() {
 		select {
 		case pose = <-poses:
 			// we've received the next pose from channel, so send next image frame for detection
-			processFrame(&img)
+			processFrame(img)
 
 		default:
 			// show current frame without blocking, so do nothing here
 		}
 
-		drawPose(&img)
+		drawPose(img)
 
 		window.IMShow(img)
 		if window.WaitKey(1) >= 0 {
@@ -127,8 +127,8 @@ func main() {
 
 func processFrame(i gocv.Mat) {
 	frame := gocv.NewMat()
-	i.CopyTo(&frame)
-	images <- &frame
+	i.CopyTo(frame)
+	images <- frame
 }
 
 // performDetection analyzes the results from the detector network.
@@ -140,7 +140,7 @@ func performDetection() {
 		frame := <-images
 
 		// convert image Mat to 368x368 blob that the pose detector can analyze
-		blob := gocv.BlobFromImage(*frame, 1.0/255.0, image.Pt(368, 368), gocv.NewScalar(0, 0, 0, 0), false, false)
+		blob := gocv.BlobFromImage(frame, 1.0/255.0, image.Pt(368, 368), gocv.NewScalar(0, 0, 0, 0), false, false)
 
 		// feed the blob into the detector
 		net.SetInput(blob, "")

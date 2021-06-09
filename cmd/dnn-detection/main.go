@@ -99,7 +99,7 @@ func main() {
 	fmt.Printf("Start reading device: %v\n", deviceID)
 
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}
@@ -116,7 +116,7 @@ func main() {
 		// run a forward pass thru the network
 		prob := net.Forward("")
 
-		performDetection(&img, prob)
+		performDetection(img, prob)
 
 		prob.Close()
 		blob.Close()

@@ -63,7 +63,7 @@ func main() {
 
 	fmt.Printf("Start reading device: %v\n", deviceID)
 	for {
-		if ok := webcam.Read(&img); !ok {
+		if ok := webcam.Read(img); !ok {
 			fmt.Printf("Device closed: %v\n", deviceID)
 			return
 		}
@@ -72,16 +72,16 @@ func main() {
 		}
 
 		// cleaning up image
-		gocv.CvtColor(img, &imgGrey, gocv.ColorBGRToGray)
-		gocv.GaussianBlur(imgGrey, &imgBlur, image.Pt(35, 35), 0, 0, gocv.BorderDefault)
-		gocv.Threshold(imgBlur, &imgThresh, 0, 255, gocv.ThresholdBinaryInv+gocv.ThresholdOtsu)
+		gocv.CvtColor(img, imgGrey, gocv.ColorBGRToGray)
+		gocv.GaussianBlur(imgGrey, imgBlur, image.Pt(35, 35), 0, 0, gocv.BorderDefault)
+		gocv.Threshold(imgBlur, imgThresh, 0, 255, gocv.ThresholdBinaryInv+gocv.ThresholdOtsu)
 
 		// now find biggest contour
 		contours := gocv.FindContours(imgThresh, gocv.RetrievalExternal, gocv.ChainApproxSimple)
 		c := getBiggestContour(contours)
 
-		gocv.ConvexHull(c, &hull, true, false)
-		gocv.ConvexityDefects(c, hull, &defects)
+		gocv.ConvexHull(c, hull, true, false)
+		gocv.ConvexityDefects(c, hull, defects)
 
 		var angle float64
 		defectCount := 0
@@ -100,16 +100,16 @@ func main() {
 			// ignore angles > 90 and highlight rest with dots
 			if angle <= 90 {
 				defectCount++
-				gocv.Circle(&img, far, 1, green, 2)
+				gocv.Circle(img, far, 1, green, 2)
 			}
 		}
 
 		status := fmt.Sprintf("defectCount: %d", defectCount+1)
 
 		rect := gocv.BoundingRect(c)
-		gocv.Rectangle(&img, rect, color.RGBA{255, 255, 255, 0}, 2)
+		gocv.Rectangle(img, rect, color.RGBA{255, 255, 255, 0}, 2)
 
-		gocv.PutText(&img, status, image.Pt(10, 20), gocv.FontHersheyPlain, 1.2, green, 2)
+		gocv.PutText(img, status, image.Pt(10, 20), gocv.FontHersheyPlain, 1.2, green, 2)
 
 		window.IMShow(img)
 		if window.WaitKey(1) == 27 {
