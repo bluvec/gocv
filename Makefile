@@ -10,6 +10,12 @@ OPENCV_VERSION?=4.5.2
 # Go version to use when building Docker image
 GOVERSION?=1.16.2
 
+# Python version
+PYTHON_VERSION?=$(shell python --version | grep -Po "(?<=Python )3.[0-9]+")
+
+# Install prefix
+INSTALL_PREFIX?=${CONDA_PREFIX}
+
 # Temporary directory to put files into.
 TMP_DIR?=/tmp/
 
@@ -97,6 +103,16 @@ build:
 	$(MAKE) preinstall
 	cd -
 
+build_python:
+	cd $(TMP_DIR)opencv/opencv-$(OPENCV_VERSION)
+	mkdir build
+	cd build
+	rm -rf *
+	cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} -DOPENCV_EXTRA_MODULES_PATH=$(TMP_DIR)opencv/opencv_contrib-$(OPENCV_VERSION)/modules -DWITH_TIFF=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_opencv_java=OFF -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DPYTHON3_LIBRARY=${CONDA_PREFIX}/lib/libpython${PYTHON_VERSION}.so -DPYTHON3_INCLUDE_DIR=${CONDA_PREFIX}/include/python${PYTHON_VERSION} -DWITH_JASPER=OFF -DOPENCV_GENERATE_PKGCONFIG=ON ..
+	$(MAKE) -j $(shell nproc --all)
+	$(MAKE) preinstall
+	cd -
+
 # Build OpenCV on Raspbian with ARM hardware optimizations.
 build_raspi:
 	cd $(TMP_DIR)opencv/opencv-$(OPENCV_VERSION)
@@ -177,6 +193,9 @@ sudo_pre_install_clean:
 
 # Do everything.
 install: deps download sudo_pre_install_clean build sudo_install clean verify
+
+# Do everything with Python.
+install_python: deps download sudo_pre_install_clean build_python sudo_install clean verify
 
 # Do everything on Raspbian.
 install_raspi: deps download build_raspi sudo_install clean verify
