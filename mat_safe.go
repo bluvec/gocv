@@ -15,9 +15,6 @@ import (
 )
 
 type safeMat interface {
-	// Ptr returns the Mat's underlying object pointer.
-	Ptr() C.Mat
-
 	// setPtr sets the Mat's underlying object pointer.
 	// Be careful to use this function. Use it unless you known what you are doing.
 	// If you need to acquire a pointer, use `AcquirePtr`.
@@ -57,11 +54,6 @@ func (m *mat) Close() error {
 	}
 
 	return nil
-}
-
-// Ptr returns the Mat's underlying object pointer.
-func (m *mat) Ptr() C.Mat {
-	return m.p
 }
 
 // setPtr sets the Mat's underlying object pointer.

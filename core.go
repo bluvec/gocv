@@ -179,6 +179,9 @@ var ErrEmptyByteSlice = errors.New("empty byte array")
 type Mat interface {
 	safeMat
 
+	// Ptr returns the Mat's underlying object pointer.
+	Ptr() C.Mat
+
 	// FromPtr returns a new Mat with a specific size and type, initialized from a Mat Ptr.
 	FromPtr(rows int, cols int, mt MatType, prow int, pcol int) (Mat, error)
 
@@ -665,6 +668,11 @@ func Zeros(rows int, cols int, mt MatType) Mat {
 // https://docs.opencv.org/master/d3/d63/classcv_1_1Mat.html#a69ae0402d116fc9c71908d8508dc2f09
 func Ones(rows int, cols int, mt MatType) Mat {
 	return newMat(C.Ones(C.int(rows), C.int(cols), C.int(mt)))
+}
+
+// Ptr returns the Mat's underlying object pointer.
+func (m *mat) Ptr() C.Mat {
+	return m.p
 }
 
 // FromPtr returns a new Mat with a specific size and type, initialized from a Mat Ptr.
