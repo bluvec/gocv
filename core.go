@@ -177,19 +177,10 @@ var ErrEmptyByteSlice = errors.New("empty byte array")
 // http://docs.opencv.org/master/d3/d63/classcv_1_1Mat.html
 //
 type Mat interface {
-	SafeMat
+	safeMat
 
 	// FromPtr returns a new Mat with a specific size and type, initialized from a Mat Ptr.
 	FromPtr(rows int, cols int, mt MatType, prow int, pcol int) (Mat, error)
-
-	// Ptr returns the Mat's underlying object pointer.
-	Ptr() C.Mat
-
-	// Return data slice
-	D() []byte
-
-	// Set data slice
-	SetD(d []byte)
 
 	// Empty determines if the Mat is empty or not.
 	Empty() bool
@@ -644,7 +635,7 @@ func NewMatFromBytes(rows int, cols int, mt MatType, data []byte) (Mat, error) {
 	//
 	// TODO(bga): This could live in newMat() but I wanted to reduce the change surface.
 	// TODO(bga): Code that needs access to the array from Go could use this directly.
-	m.SetD(data)
+	m.setD(data)
 
 	return m, nil
 }
@@ -679,21 +670,6 @@ func Ones(rows int, cols int, mt MatType) Mat {
 // FromPtr returns a new Mat with a specific size and type, initialized from a Mat Ptr.
 func (m *mat) FromPtr(rows int, cols int, mt MatType, prow int, pcol int) (Mat, error) {
 	return newMat(C.Mat_FromPtr(m.p, C.int(rows), C.int(cols), C.int(mt), C.int(prow), C.int(pcol))), nil
-}
-
-// Ptr returns the Mat's underlying object pointer.
-func (m *mat) Ptr() C.Mat {
-	return m.p
-}
-
-// Return data slice
-func (m *mat) D() []byte {
-	return m.d
-}
-
-// Set data slice
-func (m *mat) SetD(d []byte) {
-	m.d = d
 }
 
 // Empty determines if the Mat is empty or not.
@@ -1918,7 +1894,7 @@ func MixChannels(src []Mat, dst []Mat, fromTo []int) {
 	C.Mat_MixChannels(cSrcMats, cDstMats, cFromToIntVector)
 
 	for i := C.int(0); i < cDstMats.length; i++ {
-		dst[i].SetPtr(C.Mats_get(cDstMats, i))
+		dst[i].setPtr(C.Mats_get(cDstMats, i))
 	}
 }
 
