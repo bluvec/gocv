@@ -38,12 +38,18 @@ func addMatToProfile(p C.Mat) {
 }
 
 // newMat returns a new Mat from a C Mat
-func newMat(p C.Mat) Mat {
+func newMat(p C.Mat) *mat {
 	m := mat{p: p}
 	runtime.SetFinalizer(&m, func(m *mat) {
 		m.Close()
 	})
 	return &m
+}
+
+func newMatWithParent(p C.Mat, parent *mat) *mat {
+	m := newMat(p)
+	m.parent = parent
+	return m
 }
 
 // Close the Mat object.

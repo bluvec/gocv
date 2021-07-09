@@ -530,6 +530,9 @@ type mat struct {
 
 	// Non-nil if Mat was created with a []byte (using NewMatFromBytes()). Nil otherwise.
 	d []byte
+
+	// Reference to parent mat
+	parent *mat
 }
 
 // NewMat returns a new empty Mat.
@@ -915,7 +918,7 @@ func (m *mat) Region(rio image.Rectangle) Mat {
 		height: C.int(rio.Size().Y),
 	}
 
-	return newMat(C.Mat_Region(m.p, cRect))
+	return newMatWithParent(C.Mat_Region(m.p, cRect), m)
 }
 
 // Reshape changes the shape and/or the number of channels of a 2D matrix without copying the data.
