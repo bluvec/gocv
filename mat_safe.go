@@ -6,10 +6,12 @@ package gocv
 /*
 #include <stdlib.h>
 #include "core.h"
+#include "mat_safe.h"
 */
 import "C"
 import (
 	"runtime"
+	"sync"
 	"sync/atomic"
 	"unsafe"
 )
@@ -86,4 +88,32 @@ func (m *mat) acquirePtr(p C.Mat) {
 		C.Mat_Close(m.p)
 	}
 	m.p = p
+}
+
+// GoMatAllocator
+var gGoMatAllocRef map[unsafe.Pointer][]byte
+var gGoMatAllocMtx sync.Mutex
+
+func init() {
+	gGoMatAllocRef = make(map[unsafe.Pointer][]byte)
+	C.GoMatAllocateInit()
+}
+
+//export goMatAllocate
+func goMatAllocate(size C.ulonglong) C.ulonglong {
+	b := make([]byte, int(size))
+	p := unsafe.Pointer(&b[0])
+
+	gGoMatAllocMtx.Lock()
+	gGoMatAllocRef[p] = b
+	gGoMatAllocMtx.Unlock()
+
+	return C.ulonglong(uintptr(p))
+}
+
+//export goMatDeallocate
+func goMatDeallocate(p C.ulonglong) {
+	gGoMatAllocMtx.Lock()
+	delete(gGoMatAllocRef, unsafe.Pointer(uintptr(p)))
+	gGoMatAllocMtx.Unlock()
 }
