@@ -2,19 +2,22 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: gocv/opencv:4.5.2
+      - image: gocv/opencv:4.5.4
     working_directory: /usr/local/go/src/github.com/hybridgroup/gocv
     environment:
         DISPLAY: 99.0
         GOCV_CAFFE_TEST_FILES: "/usr/local/go/src/github.com/hybridgroup/gocv/testdata"
         GOCV_TENSORFLOW_TEST_FILES: "/usr/local/go/src/github.com/hybridgroup/gocv/testdata"
-        GOCV_ONNX_TEST_FILES: "/usr/local/go/src/github.com/hybridgroup/gocv/testdata"
+        NO_GOCV_ONNX_TEST_FILES: "/usr/local/go/src/github.com/hybridgroup/gocv/testdata"
         OPENCV_ENABLE_NONFREE: ON
     steps:
       - checkout
       - run:
           name: Check Go version
           command: go version
+      - run:
+          name: "Enforce Go Formatted Code"
+          command: "test -z $(gofmt -l .) || gofmt -d ."
       - run:
           name: Install dependencies
           command: |
@@ -39,14 +42,19 @@ jobs:
       - run:
           name: Run main tests
           command: | 
-            xvfb-run -a --error-file /var/log/xvfb_error.log --server-args="-screen 0 1024x768x24 +extension RANDR" go test -v -coverprofile=coverage.txt -covermode=atomic -tags matprofile .
+            xvfb-run -a --error-file /var/log/xvfb_error.log --server-args="-screen 0 1024x768x24 +extension RANDR" go test -v -coverprofile=/tmp/coverage.out -count=1 -tags matprofile .
       - run:
           name: Run contrib tests
           command: | 
-            xvfb-run -a --error-file /var/log/xvfb_error.log --server-args="-screen 0 1024x768x24 +extension RANDR" go test -v -coverprofile=contrib.txt -covermode=atomic -tags matprofile ./contrib
+            xvfb-run -a --error-file /var/log/xvfb_error.log --server-args="-screen 0 1024x768x24 +extension RANDR" go test -v -coverprofile=/tmp/contrib.out -count=1 -tags matprofile ./contrib
       - run:
           name: Code coverage
           command: | 
-            cat contrib.txt >> coverage.txt
-            rm contrib.txt;
-            bash <(curl -s https://codecov.io/bash)
+            go tool cover -html=/tmp/coverage.out -o /tmp/coverage.html
+            go tool cover -html=/tmp/contrib.out -o /tmp/contrib.html
+      - store_artifacts:
+          path: /tmp/coverage.html
+          destination: test-coverage.html
+      - store_artifacts:
+          path: /tmp/contrib.html
+          destination: test-coverage-contrib.html

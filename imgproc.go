@@ -268,6 +268,26 @@ func Dilate(src Mat, dst Mat, kernel Mat) {
 	C.Dilate(src.Ptr(), dst.Ptr(), kernel.Ptr())
 }
 
+// DilateWithParams dilates an image by using a specific structuring element.
+//
+// For further details, please see:
+// https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c
+func DilateWithParams(src Mat, dst Mat, kernel Mat, anchor image.Point, iterations, borderType BorderType, borderValue color.RGBA) {
+	cAnchor := C.struct_Point{
+		x: C.int(anchor.X),
+		y: C.int(anchor.Y),
+	}
+
+	bv := C.struct_Scalar{
+		val1: C.double(borderValue.B),
+		val2: C.double(borderValue.G),
+		val3: C.double(borderValue.R),
+		val4: C.double(borderValue.A),
+	}
+
+	C.DilateWithParams(src.Ptr(), dst.Ptr(), kernel.Ptr(), cAnchor, C.int(iterations), C.int(borderType), bv)
+}
+
 // DistanceTransformLabelTypes are the types of the DistanceTransform algorithm flag
 type DistanceTransformLabelTypes int
 
@@ -533,6 +553,19 @@ func FindContours(src Mat, mode RetrievalMode, method ContourApproximationMode) 
 //
 func FindContoursWithParams(src Mat, hierarchy Mat, mode RetrievalMode, method ContourApproximationMode) PointsVector {
 	return PointsVector{p: C.FindContours(src.Ptr(), hierarchy.Ptr(), C.int(mode), C.int(method))}
+}
+
+// PointPolygonTest performs a point-in-contour test.
+//
+// For further details, please see:
+// https://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga1a539e8db2135af2566103705d7a5722
+//
+func PointPolygonTest(pts PointVector, pt image.Point, measureDist bool) float64 {
+	cp := C.struct_Point{
+		x: C.int(pt.X),
+		y: C.int(pt.Y),
+	}
+	return float64(C.PointPolygonTest(pts.p, cp, C.bool(measureDist)))
 }
 
 //ConnectedComponentsAlgorithmType specifies the type for ConnectedComponents
@@ -1178,6 +1211,27 @@ func Circle(img Mat, center image.Point, radius int, c color.RGBA, thickness int
 	C.Circle(img.Ptr(), pc, C.int(radius), sColor, C.int(thickness))
 }
 
+// CircleWithParams draws a circle.
+//
+// For further details, please see:
+// https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#gaf10604b069374903dbd0f0488cb43670
+//
+func CircleWithParams(img Mat, center image.Point, radius int, c color.RGBA, thickness int, lineType LineType, shift int) {
+	pc := C.struct_Point{
+		x: C.int(center.X),
+		y: C.int(center.Y),
+	}
+
+	sColor := C.struct_Scalar{
+		val1: C.double(c.B),
+		val2: C.double(c.G),
+		val3: C.double(c.R),
+		val4: C.double(c.A),
+	}
+
+	C.CircleWithParams(img.Ptr(), pc, C.int(radius), sColor, C.int(thickness), C.int(lineType), C.int(shift))
+}
+
 // Ellipse draws a simple or thick elliptic arc or fills an ellipse sector.
 //
 // For further details, please see:
@@ -1201,6 +1255,31 @@ func Ellipse(img Mat, center, axes image.Point, angle, startAngle, endAngle floa
 	}
 
 	C.Ellipse(img.Ptr(), pc, pa, C.double(angle), C.double(startAngle), C.double(endAngle), sColor, C.int(thickness))
+}
+
+// Ellipse draws a simple or thick elliptic arc or fills an ellipse sector.
+//
+// For further details, please see:
+// https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#ga28b2267d35786f5f890ca167236cbc69
+//
+func EllipseWithParams(img Mat, center, axes image.Point, angle, startAngle, endAngle float64, c color.RGBA, thickness int, lineType LineType, shift int) {
+	pc := C.struct_Point{
+		x: C.int(center.X),
+		y: C.int(center.Y),
+	}
+	pa := C.struct_Point{
+		x: C.int(axes.X),
+		y: C.int(axes.Y),
+	}
+
+	sColor := C.struct_Scalar{
+		val1: C.double(c.B),
+		val2: C.double(c.G),
+		val3: C.double(c.R),
+		val4: C.double(c.A),
+	}
+
+	C.EllipseWithParams(img.Ptr(), pc, pa, C.double(angle), C.double(startAngle), C.double(endAngle), sColor, C.int(thickness), C.int(lineType), C.int(shift))
 }
 
 // Line draws a line segment connecting two points.
@@ -1253,6 +1332,30 @@ func Rectangle(img Mat, r image.Rectangle, c color.RGBA, thickness int) {
 	C.Rectangle(img.Ptr(), cRect, sColor, C.int(thickness))
 }
 
+// RectangleWithParams draws a simple, thick, or filled up-right rectangle.
+// It renders a rectangle with the desired characteristics to the target Mat image.
+//
+// For further details, please see:
+// http://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#ga346ac30b5c74e9b5137576c9ee9e0e8c
+//
+func RectangleWithParams(img Mat, r image.Rectangle, c color.RGBA, thickness int, lineType LineType, shift int) {
+	cRect := C.struct_Rect{
+		x:      C.int(r.Min.X),
+		y:      C.int(r.Min.Y),
+		width:  C.int(r.Size().X),
+		height: C.int(r.Size().Y),
+	}
+
+	sColor := C.struct_Scalar{
+		val1: C.double(c.B),
+		val2: C.double(c.G),
+		val3: C.double(c.R),
+		val4: C.double(c.A),
+	}
+
+	C.RectangleWithParams(img.Ptr(), cRect, sColor, C.int(thickness), C.int(lineType), C.int(shift))
+}
+
 // FillPoly fills the area bounded by one or more polygons.
 //
 // For more information, see:
@@ -1266,6 +1369,26 @@ func FillPoly(img Mat, pts PointsVector, c color.RGBA) {
 	}
 
 	C.FillPoly(img.Ptr(), pts.p, sColor)
+}
+
+// FillPolyWithParams fills the area bounded by one or more polygons.
+//
+// For more information, see:
+// https://docs.opencv.org/master/d6/d6e/group__imgproc__draw.html#gaf30888828337aa4c6b56782b5dfbd4b7
+func FillPolyWithParams(img Mat, pts PointsVector, c color.RGBA, lineType LineType, shift int, offset image.Point) {
+	offsetP := C.struct_Point{
+		x: C.int(offset.X),
+		y: C.int(offset.Y),
+	}
+
+	sColor := C.struct_Scalar{
+		val1: C.double(c.B),
+		val2: C.double(c.G),
+		val3: C.double(c.R),
+		val4: C.double(c.A),
+	}
+
+	C.FillPolyWithParams(img.Ptr(), pts.p, sColor, C.int(lineType), C.int(shift), offsetP)
 }
 
 // Polylines draws several polygonal curves.

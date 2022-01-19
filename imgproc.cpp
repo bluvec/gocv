@@ -129,6 +129,13 @@ void Dilate(Mat src, Mat dst, Mat kernel) {
     cv::dilate(*src, *dst, *kernel);
 }
 
+void DilateWithParams(Mat src, Mat dst, Mat kernel, Point anchor, int iterations, int borderType, Scalar borderValue) {
+    cv::Point pt1(anchor.x, anchor.y);
+    cv::Scalar c = cv::Scalar(borderValue.val1, borderValue.val2, borderValue.val3, borderValue.val4);
+
+    cv::dilate(*src, *dst, *kernel, pt1, iterations, borderType, c);
+}
+
 void DistanceTransform(Mat src, Mat dst, Mat labels, int distanceType, int maskSize, int labelType) {
     cv::distanceTransform(*src, *dst, *labels, distanceType, maskSize, labelType);
 }
@@ -218,6 +225,12 @@ PointsVector FindContours(Mat src, Mat hierarchy, int mode, int method) {
     cv::findContours(*src, *contours, *hierarchy, mode, method);
 
     return contours;
+}
+
+double PointPolygonTest(PointVector pts, Point pt, bool measureDist) {
+	cv::Point2f pt1(pt.x, pt.y);
+
+  return cv::pointPolygonTest(*pts, pt1, measureDist);
 }
 
 int ConnectedComponents(Mat src, Mat labels, int connectivity, int ltype, int ccltype){
@@ -355,6 +368,13 @@ void Circle(Mat img, Point center, int radius, Scalar color, int thickness) {
     cv::circle(*img, p1, radius, c, thickness);
 }
 
+void CircleWithParams(Mat img, Point center, int radius, Scalar color, int thickness, int lineType, int shift) {
+    cv::Point p1(center.x, center.y);
+    cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
+
+    cv::circle(*img, p1, radius, c, thickness, lineType, shift);
+}
+
 void Ellipse(Mat img, Point center, Point axes, double angle, double
              startAngle, double endAngle, Scalar color, int thickness) {
     cv::Point p1(center.x, center.y);
@@ -362,6 +382,15 @@ void Ellipse(Mat img, Point center, Point axes, double angle, double
     cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
 
     cv::ellipse(*img, p1, p2, angle, startAngle, endAngle, c, thickness);
+}
+
+void EllipseWithParams(Mat img, Point center, Point axes, double angle, double
+             startAngle, double endAngle, Scalar color, int thickness, int lineType, int shift) {
+    cv::Point p1(center.x, center.y);
+    cv::Point p2(axes.x, axes.y);
+    cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
+
+    cv::ellipse(*img, p1, p2, angle, startAngle, endAngle, c, thickness, lineType, shift);
 }
 
 void Line(Mat img, Point pt1, Point pt2, Scalar color, int thickness) {
@@ -384,10 +413,29 @@ void Rectangle(Mat img, Rect r, Scalar color, int thickness) {
     );
 }
 
+void RectangleWithParams(Mat img, Rect r, Scalar color, int thickness, int lineType, int shift) {
+    cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
+    cv::rectangle(
+        *img,
+        cv::Point(r.x, r.y),
+        cv::Point(r.x + r.width, r.y + r.height),
+        c,
+        thickness,
+        lineType,
+        shift
+    );
+}
+
 void FillPoly(Mat img, PointsVector pts, Scalar color) {
     cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
 
     cv::fillPoly(*img, *pts, c);
+}
+
+void FillPolyWithParams(Mat img, PointsVector pts, Scalar color, int lineType, int shift, Point offset) {
+    cv::Scalar c = cv::Scalar(color.val1, color.val2, color.val3, color.val4);
+
+    cv::fillPoly(*img, *pts, c, lineType, shift, cv::Point(offset.x, offset.y));
 }
 
 void Polylines(Mat img, PointsVector pts, bool isClosed, Scalar color,int thickness) {

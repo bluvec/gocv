@@ -1,4 +1,4 @@
-// +build !customenv,!openvino
+// +build !customenv,!static
 
 package contrib
 
@@ -8,6 +8,6 @@ package contrib
 #cgo !windows pkg-config: opencv4
 #cgo CXXFLAGS:   --std=c++11
 #cgo windows  CPPFLAGS:   -IC:/opencv/build/install/include
-#cgo windows  LDFLAGS:    -LC:/opencv/build/install/x64/mingw/lib -lopencv_core452 -lopencv_face452 -lopencv_videoio452 -lopencv_imgproc452 -lopencv_highgui452 -lopencv_imgcodecs452 -lopencv_objdetect452 -lopencv_features2d452 -lopencv_video452 -lopencv_dnn452 -lopencv_xfeatures2d452 -lopencv_plot452 -lopencv_tracking452 -lopencv_img_hash452 -lopencv_calib3d452 -lopencv_bgsegm452
+#cgo windows  LDFLAGS:    -LC:/opencv/build/install/x64/mingw/lib -lopencv_core454 -lopencv_face454 -lopencv_videoio454 -lopencv_imgproc454 -lopencv_highgui454 -lopencv_imgcodecs454 -lopencv_objdetect454 -lopencv_features2d454 -lopencv_video454 -lopencv_dnn454 -lopencv_xfeatures2d454 -lopencv_plot454 -lopencv_tracking454 -lopencv_img_hash454 -lopencv_calib3d454 -lopencv_bgsegm454 -lopencv_xphoto454 -lopencv_aruco454
 */
 import "C"

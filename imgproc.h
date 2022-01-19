@@ -30,6 +30,7 @@ void Blur(Mat src, Mat dst, Size ps);
 void BoxFilter(Mat src, Mat dst, int ddepth, Size ps);
 void SqBoxFilter(Mat src, Mat dst, int ddepth, Size ps);
 void Dilate(Mat src, Mat dst, Mat kernel);
+void DilateWithParams(Mat src, Mat dst, Mat kernel, Point anchor, int iterations, int borderType, Scalar borderValue);
 void DistanceTransform(Mat src, Mat dst, Mat labels, int distanceType, int maskSize, int labelType);
 void Erode(Mat src, Mat dst, Mat kernel);
 void ErodeWithParams(Mat src, Mat dst, Mat kernel, Point anchor, int iterations, int borderType);
@@ -44,6 +45,7 @@ struct RotatedRect MinAreaRect(PointVector pts);
 struct RotatedRect FitEllipse(PointVector pts);
 void MinEnclosingCircle(PointVector pts, Point2f* center, float* radius);
 PointsVector FindContours(Mat src, Mat hierarchy, int mode, int method);
+double PointPolygonTest(PointVector pts, Point pt, bool measureDist);
 int ConnectedComponents(Mat src, Mat dst, int connectivity, int ltype, int ccltype);
 int ConnectedComponentsWithStats(Mat src, Mat labels, Mat stats, Mat centroids, int connectivity, int ltype, int ccltype);
 
@@ -78,11 +80,16 @@ void AdaptiveThreshold(Mat src, Mat dst, double maxValue, int adaptiveTyp, int t
 
 void ArrowedLine(Mat img, Point pt1, Point pt2, Scalar color, int thickness);
 void Circle(Mat img, Point center, int radius, Scalar color, int thickness);
+void CircleWithParams(Mat img, Point center, int radius, Scalar color, int thickness, int lineType, int shift);
 void Ellipse(Mat img, Point center, Point axes, double angle, double
              startAngle, double endAngle, Scalar color, int thickness);
+void EllipseWithParams(Mat img, Point center, Point axes, double angle, double
+             startAngle, double endAngle, Scalar color, int thickness, int lineType, int shift);
 void Line(Mat img, Point pt1, Point pt2, Scalar color, int thickness);
 void Rectangle(Mat img, Rect rect, Scalar color, int thickness);
+void RectangleWithParams(Mat img, Rect rect, Scalar color, int thickness, int lineType, int shift);
 void FillPoly(Mat img, PointsVector points, Scalar color);
+void FillPolyWithParams(Mat img, PointsVector points, Scalar color, int lineType, int shift, Point offset);
 void Polylines(Mat img, PointsVector points, bool isClosed, Scalar color, int thickness);
 struct Size GetTextSize(const char* text, int fontFace, double fontScale, int thickness);
 struct Size GetTextSizeWithBaseline(const char* text, int fontFace, double fontScale, int thickness, int* baseline);
